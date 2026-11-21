@@ -81,7 +81,7 @@ const allInOnePanel=document.getElementById('allInOnePanel'),allInOneText=docume
 document.getElementById('openAddFormBtn').addEventListener('click',()=>{resetFormState();addBox.open=true;addBox.scrollIntoView({behavior:'smooth',block:'start'});document.getElementById('f_title').focus()});
 document.getElementById('openAllInOneBtn').addEventListener('click',()=>{allInOnePanel.hidden=false;allInOnePanel.scrollIntoView({behavior:'smooth',block:'center'});allInOneText.focus()});
 document.getElementById('closeAllInOneBtn').addEventListener('click',()=>{allInOnePanel.hidden=true});
-function normalizeFieldKey(s){return String(s||'').toLowerCase().replace(/[\\s_*#()[\\]{}:：·-]/g,'').replace(/작품명/g,'글제목').replace(/제목/g,'글제목').replace(/작가/g,'작가명').replace(/주소/g,'링크').replace(/url/g,'링크').replace(/소개/g,'한줄소개').replace(/게재사이트/g,'게재사이트').replace(/원문언어/g,'원문영어').replace(/언어/g,'원문영어').replace(/장르키워드/g,'장르키워드').replace(/공수키워드/g,'공수키워드').replace(/연령등급/g,'연령등급').replace(/연령/g,'연령등급').replace(/연재구분/g,'연재구분').replace(/분량/g,'연재구분')}
+function normalizeFieldKey(s){return String(s||'').toLowerCase().replace(/\\s+/g,'').replace(/[_*#():：·-]/g,'').replace(/[\\[\\]{}]/g,'').replace(/작품명/g,'글제목').replace(/제목/g,'글제목').replace(/작가/g,'작가명').replace(/주소/g,'링크').replace(/url/g,'링크').replace(/소개/g,'한줄소개').replace(/게재사이트/g,'게재사이트').replace(/원문언어/g,'원문영어').replace(/언어/g,'원문영어').replace(/장르키워드/g,'장르키워드').replace(/공수키워드/g,'공수키워드').replace(/연령등급/g,'연령등급').replace(/연령/g,'연령등급').replace(/연재구분/g,'연재구분').replace(/분량/g,'연재구분')}
 function parseAllInOne(raw){
  const aliases={
   title:['글제목','작품제목','제목','title'],author:['작가명','작가','author'],link:['링크','원문링크','작품링크','url'],
@@ -104,7 +104,7 @@ function parseAllInOne(raw){
  if(!Object.keys(out).length && lines.length>=2){const vals=lines.map(x=>x.trim());const fields=['title','author','link','summary','site','language','genre','pairing','cp','age','length'];fields.forEach((k,i)=>{if(vals[i])out[k]=vals[i]})}
  return out;
 }
-function clickSegment(seg,value){if(!value)return false;const buttons=[...seg.querySelectorAll('.seg-btn')];const exact=buttons.find(b=>b.dataset.val.toLowerCase()===value.toLowerCase());const found=exact||buttons.find(b=>value.toLowerCase().includes(b.dataset.val.toLowerCase())||b.textContent.toLowerCase().includes(value.toLowerCase()));if(!found)return false;found.click();return true}
+function clickSegment(seg,value){if(!value)return false;const buttons=[...seg.querySelectorAll('.seg-btn')];const exact=buttons.find(b=>b.dataset.val.toLowerCase()===value.toLowerCase());const found=exact||buttons.find(b=>value.toLowerCase().includes(b.dataset.val.toLowerCase())||b.textContent.toLowerCase().includes(value.toLowerCase()));if(!found)return false;if(!found.classList.contains('active'))found.click();return true}
 function parseKeywordList(value){return String(value||'').split(/[,，、/|\n]+/).map(x=>x.trim()).filter(Boolean)}
 function limitGenreKeywords(value){return parseKeywordList(value).slice(0,5)}
 function limitPairingKeywords(value){
